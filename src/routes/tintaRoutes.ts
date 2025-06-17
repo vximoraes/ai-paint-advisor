@@ -1,10 +1,12 @@
 import { Router } from 'express';
-import { getAllTintas, getTintaById, createTinta } from '../controllers/tintaController';
+import TintaController from '../controllers/tintaController';
 
 const router = Router();
+const tintaController = new TintaController();
 
-router.get('/', getAllTintas);
-router.get('/:id', getTintaById);
-router.post('/', createTinta);
+router
+    .get('/', tintaController.getAllTintas)
+    .get('/:id', tintaController.getTintaById)
+    .post('/', tintaController.createTinta)
 
 export default router;
