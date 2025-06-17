@@ -1,0 +1,37 @@
+{
+    "name": "loomi-paint-advisor",
+    "version": "1.0.0",
+    "description": "A Clean Architecture Express.js API for paint advisory.",
+    "main": "dist/server.js",
+    "scripts": {
+        "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+        "build": "tsc",
+        "start": "node dist/server.js",
+        "prisma:generate": "prisma generate",
+        "prisma:migrate": "prisma migrate dev"
+    },
+    "dependencies": {
+        "@prisma/client": "^6.10.0",
+        "cors": "^2.8.5",
+        "csv-parser": "^3.2.0",
+        "dotenv": "^16.4.5",
+        "express": "^4.19.2",
+        "helmet": "^7.1.2",
+        "jsonwebtoken": "^9.0.2",
+        "passport": "^0.7.0",
+        "passport-jwt": "^4.0.1",
+        "prisma": "^6.10.0",
+        "swagger-jsdoc": "^6.2.8",
+        "swagger-ui-express": "^4.6.3"
+    },
+    "devDependencies": {
+        "@types/cors": "^2.8.17",
+        "@types/express": "^4.17.21",
+        "@types/node": "^20.12.7",
+        "@types/passport-jwt": "^3.0.8",
+        "@types/swagger-jsdoc": "^6.0.2",
+        "@types/swagger-ui-express": "^4.1.4",
+        "ts-node-dev": "^2.0.0",
+        "typescript": "^5.4.5"
+    }
+}
