@@ -16,8 +16,11 @@ services:
       timeout: 5s
       retries: 5
   api:
-    build: .
-    command: sh -c "npx prisma migrate deploy && node dist/utils/importPaintsFromCSV.js && npm run start"
+    build:
+      context: ./api-service
+      dockerfile: Dockerfile
+    working_dir: /usr/src/app
+    command: sh -c "npx prisma migrate deploy && node dist/utils/importPaintsFromCSV.js && node dist/server.js"
     ports:
       - '4000:4000'
     environment:
