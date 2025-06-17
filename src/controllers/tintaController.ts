@@ -1,38 +1,75 @@
 import { Request, Response } from 'express';
-import { TintaService } from '../services/tintaService';
-import { PrismaClient } from '@prisma/client';
-import { TintaRepository } from '../repositories/tintaRepository';
+import { TintaCreateSchema, TintaUpdateSchema, TintaIdSchema } from '../utils/validators/schemas/tintaSchema';
+import { TintaService } from '../services/TintaService';
 
 export class TintaController {
-    private tintaService: TintaService;
+    private service: TintaService;
 
-    constructor() {
-        this.tintaService = new TintaService();
+    constructor(service: TintaService) {
+        this.service = service;
     }
 
-    getAllTintas = async (req: Request, res: Response) => {
-        const tintas = await this.tintaService.getAllTintas();
-        res.json(tintas);
-    };
-
-    getTintaById = async (req: Request, res: Response) => {
-        const id = Number(req.params.id);
-        const tinta = await this.tintaService.getTintaById(id);
-        if (tinta) res.json(tinta);
-        else res.status(404).json({ message: 'Tinta não encontrada' });
-    };
-
-    createTinta = async (req: Request, res: Response) => {
-        const { nome, cor, tipo_parede, ambiente, acabamento, features, linha } = req.body;
-        if (
-            !nome || !cor || !tipo_parede || !ambiente ||
-            !acabamento || !features || !linha
-        ) {
-            return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
+    async create(req: Request, res: Response) {
+        const parsed = TintaCreateSchema.safeParse(req.body);
+        if (!parsed.success) {
+            return res.status(400).json({ errors: parsed.error.errors });
         }
-        const tinta = await this.tintaService.createTinta({ nome, cor, tipo_parede, ambiente, acabamento, features, linha });
+
+        const tinta = await this.service.create(parsed.data);
         res.status(201).json(tinta);
-    };
+    }
+
+    async findAll(req: Request, res: Response) {
+        const tintas = await this.service.findAll();
+        res.status(200).json(tintas);
+    }
+
+    async findById(req: Request, res: Response) {
+        const parsed = TintaIdSchema.safeParse(req.params);
+        if (!parsed.success) {
+            return res.status(400).json({ errors: parsed.error.errors });
+        }
+        
+        const tinta = await this.service.findById(parsed.data.id);
+        if (!tinta) {
+            return res.status(404).json({ message: 'Tinta não encontrada' });
+        }
+
+        res.status(200).json(tinta);
+    }
+
+    async update(req: Request, res: Response) {
+        const idParsed = TintaIdSchema.safeParse(req.params);
+        if (!idParsed.success) {
+            return res.status(400).json({ errors: idParsed.error.errors });
+        }
+
+        const bodyParsed = TintaUpdateSchema.safeParse(req.body);
+        if (!bodyParsed.success) {
+            return res.status(400).json({ errors: bodyParsed.error.errors });
+        }
+
+        const tinta = await this.service.update(idParsed.data.id, bodyParsed.data);
+        if (!tinta) {
+            return res.status(404).json({ message: 'Tinta não encontrada' });
+        }
+
+        res.status(200).json(tinta);
+    }
+
+    async delete(req: Request, res: Response) {
+        const parsed = TintaIdSchema.safeParse(req.params);
+        if (!parsed.success) {
+            return res.status(400).json({ errors: parsed.error.errors });
+        }
+
+        const deleted = await this.service.delete(parsed.data.id);
+        if (!deleted) {
+            return res.status(404).json({ message: 'Tinta não encontrada' });
+        }
+        
+        res.status(200).json({ message: 'Tinta deletada com sucesso' });
+    }
 }
 
 export default TintaController;

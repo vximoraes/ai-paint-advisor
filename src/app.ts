@@ -27,8 +27,8 @@ const swaggerOptions = {
     apis: ['./src/interfaces/http/routes/*.ts', './src/interfaces/http/controllers/*.ts'],
 };
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.use('/api/tintas', routes);
+app.use(routes);
 
 export default app;

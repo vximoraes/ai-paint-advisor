@@ -1,23 +1,37 @@
 import { PrismaClient } from '@prisma/client';
 import { Tinta } from '../models/Tinta';
+import { TintaCreateInput, TintaUpdateInput, ITintaRepository } from '../models/TintaTypes';
 
-export class TintaRepository {
-    private prisma: PrismaClient;
+export class TintaRepository implements ITintaRepository {
+    constructor(private prisma: PrismaClient) {}
 
-    constructor() {
-        this.prisma = new PrismaClient();
+    async create(data: TintaCreateInput) {
+        return this.prisma.tinta.create({ data });
     }
 
-    async findAll(): Promise<Tinta[]> {
+    async findAll() {
         return this.prisma.tinta.findMany();
     }
 
-    async findById(id: number): Promise<Tinta | null> {
+    async findById(id: number) {
         return this.prisma.tinta.findUnique({ where: { id } });
     }
 
-    async create(data: Omit<Tinta, 'id'>): Promise<Tinta> {
-        return this.prisma.tinta.create({ data });
+    async update(id: number, data: TintaUpdateInput) {
+        try {
+        return await this.prisma.tinta.update({ where: { id }, data });
+        } catch (e) {
+        return null;
+        }
+    }
+
+    async delete(id: number) {
+        try {
+        await this.prisma.tinta.delete({ where: { id } });
+        return true;
+        } catch (e) {
+        return false;
+        }
     }
 }
 

@@ -1,23 +1,35 @@
-import TintaRepository from '../repositories/tintaRepository';
+import { ITintaRepository, TintaCreateInput, TintaUpdateInput } from '../models/TintaTypes';
 import { Tinta } from '../models/Tinta';
 
 export class TintaService {
-    private tintaRepository: TintaRepository;
+    private repository: ITintaRepository;
 
-    constructor() {
-        this.tintaRepository = new TintaRepository();
+    constructor(repository: ITintaRepository) {
+        this.repository = repository;
     }
 
-    async getAllTintas(): Promise<Tinta[]> {
-        return this.tintaRepository.findAll();
+    async create(data: TintaCreateInput) {
+        const all = await this.repository.findAll();
+        if (all.some((tinta: Tinta) => tinta.nome === data.nome)) {
+            throw new Error('Já existe uma tinta com esse nome');
+        }
+        return this.repository.create(data);
     }
 
-    async getTintaById(id: number): Promise<Tinta | null> {
-        return this.tintaRepository.findById(id);
+    async findAll() {
+        return this.repository.findAll();
     }
 
-    async createTinta(data: Omit<Tinta, 'id'>): Promise<Tinta> {
-        return this.tintaRepository.create(data);
+    async findById(id: number) {
+        return this.repository.findById(id);
+    }
+
+    async update(id: number, data: TintaUpdateInput) {
+        return this.repository.update(id, data);
+    }
+
+    async delete(id: number) {
+        return this.repository.delete(id);
     }
 }
 
