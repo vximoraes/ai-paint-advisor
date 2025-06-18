@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import routes from './routes/tintaRoutes';
+import usuarioRoutes from './routes/usuarioRoutes';
+import authRoutes from './routes/authRoutes';
 
 dotenv.config();
 
@@ -30,5 +32,7 @@ const swaggerSpec = swaggerJSDoc(swaggerOptions);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(routes);
+app.use(usuarioRoutes);
+app.use(authRoutes);
 
 export default app;
