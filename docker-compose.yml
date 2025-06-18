@@ -25,6 +25,8 @@ services:
       - '4000:4000'
     environment:
       DATABASE_URL: postgres://postgres:postgres@db:5432/loomi_paint_advisor
+    env_file:
+      - ./api-service/.env
     depends_on:
       db:
         condition: service_healthy
