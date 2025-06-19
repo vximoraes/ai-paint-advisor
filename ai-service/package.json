@@ -1,0 +1,22 @@
+{
+    "name": "ai-service",
+    "version": "1.0.0",
+    "main": "dist/index.js",
+    "scripts": {
+        "dev": "ts-node src/index.ts",
+        "build": "tsc",
+        "start": "node dist/index.js"
+    },
+    "dependencies": {
+        "@langchain/openai": "^0.0.1",
+        "dotenv": "^10.0.0",
+        "express": "^4.21.2",
+        "langchain": "^0.3.28",
+        "openai": "^4.104.0"
+    },
+    "devDependencies": {
+        "@types/express": "^4.17.23",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.8.3"
+    }
+}
