@@ -9,11 +9,25 @@ datasource db {
 
 model Tinta {
   id            Int    @id @default(autoincrement())
-  nome          String
+  nome          String @unique
   cor           String
   tipo_parede   String
   ambiente      String
   acabamento    String
   features      String
   linha         String
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Usuario {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  email     String   @unique
+  senha     String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
 }

@@ -20,11 +20,13 @@ services:
       context: ./api-service
       dockerfile: Dockerfile
     working_dir: /usr/src/app
-    command: sh -c "npx prisma migrate deploy && node dist/utils/importPaintsFromCSV.js && node dist/server.js"
+    command: sh -c "npx prisma migrate deploy && node dist/server.js"
     ports:
       - '4000:4000'
     environment:
       DATABASE_URL: postgres://postgres:postgres@db:5432/loomi_paint_advisor
+    env_file:
+      - ./api-service/.env
     depends_on:
       db:
         condition: service_healthy

@@ -11,7 +11,7 @@ export class TintaService {
     async create(data: TintaCreateInput) {
         const all = await this.repository.findAll();
         if (all.some((tinta: Tinta) => tinta.nome === data.nome)) {
-            throw new Error('Já existe uma tinta com esse nome');
+            return { error: 'Já existe uma tinta com esse nome' };
         }
         return this.repository.create(data);
     }

@@ -10,7 +10,7 @@ export class TintaRepository implements ITintaRepository {
     }
 
     async findAll() {
-        return this.prisma.tinta.findMany();
+        return this.prisma.tinta.findMany({ orderBy: { id: 'asc' } });
     }
 
     async findById(id: number) {
@@ -19,18 +19,18 @@ export class TintaRepository implements ITintaRepository {
 
     async update(id: number, data: TintaUpdateInput) {
         try {
-        return await this.prisma.tinta.update({ where: { id }, data });
+            return await this.prisma.tinta.update({ where: { id }, data });
         } catch (e) {
-        return null;
+            return null;
         }
     }
 
     async delete(id: number) {
         try {
-        await this.prisma.tinta.delete({ where: { id } });
-        return true;
+            await this.prisma.tinta.delete({ where: { id } });
+            return true;
         } catch (e) {
-        return false;
+            return false;
         }
     }
 }
