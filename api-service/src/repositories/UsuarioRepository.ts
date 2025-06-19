@@ -10,7 +10,7 @@ class UsuarioRepository implements IUsuarioRepository {
     }
 
     async findAll(): Promise<Usuario[]> {
-        return this.prisma.usuario.findMany();
+        return this.prisma.usuario.findMany({ orderBy: { id: 'asc' } });
     }
 
     async findById(id: number): Promise<Usuario | null> {

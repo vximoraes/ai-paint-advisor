@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import UsuarioService from '../services/UsuarioService';
 import { UsuarioCreateSchema, UsuarioUpdateSchema, UsuarioIdSchema } from '../utils/validators/schemas/usuarioSchema';
+import { Usuario } from '../models/Usuario';
 
 class UsuarioController {
     private usuarioService: UsuarioService;
@@ -15,6 +16,10 @@ class UsuarioController {
         }
 
         const user = await this.usuarioService.create(parsed.data);
+        if ((user as any).error) {
+            return res.status(400).json({ message: (user as any).error });
+        }
+        
         res.status(201).json(user);
     }
 
@@ -24,6 +29,17 @@ class UsuarioController {
     }
 
     async findById(req: Request, res: Response) {
+        const { id: requestedId } = req.params;
+
+        const loggedInUser = (req as any).user as Usuario | undefined;
+        if (!loggedInUser) {
+            return res.status(401).json({ message: 'Usuário não autenticado.' });
+        }
+
+        if (loggedInUser.role !== 'ADMIN' && String(loggedInUser.id) !== requestedId) {
+            return res.status(403).json({ message: 'Acesso negado. Permissão insuficiente.' });
+        }
+
         const parsed = UsuarioIdSchema.safeParse(req.params);
         if (!parsed.success) {
             return res.status(400).json({ errors: parsed.error.errors });
@@ -35,6 +51,17 @@ class UsuarioController {
     }
 
     async update(req: Request, res: Response) {
+        const { id: requestedId } = req.params;
+
+        const loggedInUser = (req as any).user as Usuario | undefined;
+        if (!loggedInUser) {
+            return res.status(401).json({ message: 'Usuário não autenticado.' });
+        }
+
+        if (loggedInUser.role !== 'ADMIN' && String(loggedInUser.id) !== requestedId) {
+            return res.status(403).json({ message: 'Acesso negado. Permissão insuficiente.' });
+        }
+
         const idParsed = UsuarioIdSchema.safeParse(req.params);
         if (!idParsed.success) {
             return res.status(400).json({ errors: idParsed.error.errors });
@@ -46,6 +73,10 @@ class UsuarioController {
         }
 
         const user = await this.usuarioService.update(idParsed.data.id, bodyParsed.data);
+        if ((user as any).error) {
+            return res.status(404).json({ message: (user as any).error });
+        }
+        
         res.status(200).json(user);
     }
 
@@ -55,7 +86,11 @@ class UsuarioController {
             return res.status(400).json({ errors: parsed.error.errors });
         }
 
-        await this.usuarioService.delete(parsed.data.id);
+        const deleted = await this.usuarioService.delete(parsed.data.id);
+        if (!deleted) {
+            return res.status(404).json({ message: 'Usuário não encontrado' });
+        }
+        
         res.status(200).json({ message: 'Usuário deletado com sucesso' });
     }
 }

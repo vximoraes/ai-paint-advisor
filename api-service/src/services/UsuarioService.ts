@@ -10,9 +10,7 @@ class UsuarioService {
     async create(data: UsuarioCreateInput) {
         const existing = await this.usuarioRepository.findByEmail(data.email);
         if (existing) {
-            const error = new Error('E-mail já cadastrado.');
-            (error as any).status = 400;
-            throw error;
+            return { error: 'E-mail já cadastrado.' };
         }
 
         const hashedSenha = await bcrypt.hash(data.senha, 10);
@@ -35,17 +33,23 @@ class UsuarioService {
     async findById(id: number) {
         const user = await this.usuarioRepository.findById(id);
         if (!user) return null;
+        
         const { senha, ...userWithoutSenha } = user as any;
         return userWithoutSenha;
     }
 
     async update(id: number, data: UsuarioUpdateInput) {
         if (data.senha) {
-        data.senha = await bcrypt.hash(data.senha, 10);
+            data.senha = await bcrypt.hash(data.senha, 10);
         }
-        const user = await this.usuarioRepository.update(id, data);
-        const { senha, ...userWithoutSenha } = user as any;
-        return userWithoutSenha;
+
+        try {
+            const user = await this.usuarioRepository.update(id, data);
+            const { senha, ...userWithoutSenha } = user as any;
+            return userWithoutSenha;
+        } catch (e) {
+            return { error: 'Usuário não encontrado' };
+        }
     }
 
     async delete(id: number) {
