@@ -28,4 +28,7 @@ CREATE TABLE "Usuario" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Tinta_nome_key" ON "Tinta"("nome");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Usuario_email_key" ON "Usuario"("email");

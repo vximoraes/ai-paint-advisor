@@ -1,19 +1,15 @@
 import { PrismaClient, Role } from '@prisma/client';
 import bcrypt from 'bcrypt';
-import dotenv from 'dotenv';
 
-dotenv.config();
-const prisma = new PrismaClient();
-
-async function main() {
+export async function adminSeed(prisma: PrismaClient) {
     console.log('Iniciando seed do usuário admin...');
 
     const adminEmail = process.env.ADMIN_EMAIL;
     const adminPassword = process.env.ADMIN_PASSWORD;
 
     if (!adminEmail || !adminPassword) {
-        console.error('ADMIN_EMAIL e ADMIN_PASSWORD devem estar definidos no seu arquivo .env.');
-        process.exit(1);
+        console.error('ADMIN_EMAIL e ADMIN_PASSWORD devem estar definidos no .env.');
+        return;
     }
 
     const existingAdmin = await prisma.usuario.findUnique({
@@ -21,7 +17,7 @@ async function main() {
     });
 
     if (existingAdmin) {
-        console.log('Usuário admin já existe.');
+        console.warn('Já existe um usuário com o e-mail do admin. Nenhuma alteração foi feita por segurança.');
         return;
     }
 
@@ -29,21 +25,12 @@ async function main() {
 
     await prisma.usuario.create({
         data: {
-        nome: 'Admin',
-        email: adminEmail,
-        senha: hashedPassword,
-        role: Role.ADMIN,
+            nome: 'Admin',
+            email: adminEmail,
+            senha: hashedPassword,
+            role: Role.ADMIN,
         },
     });
 
     console.log('Usuário admin criado com sucesso!');
 }
-
-main()
-    .catch((e) => {
-        console.error(e);
-        process.exit(1);
-    })
-    .finally(async () => {
-        await prisma.$disconnect();
-    });
