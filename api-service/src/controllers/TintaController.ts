@@ -16,6 +16,10 @@ export class TintaController {
         }
 
         const tinta = await this.service.create(parsed.data);
+        if ((tinta as any).error) {
+            return res.status(400).json({ message: (tinta as any).error });
+        }
+        
         res.status(201).json(tinta);
     }
 

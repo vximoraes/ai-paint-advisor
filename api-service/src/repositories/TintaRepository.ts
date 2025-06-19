@@ -10,7 +10,7 @@ export class TintaRepository implements ITintaRepository {
     }
 
     async findAll() {
-        return this.prisma.tinta.findMany();
+        return this.prisma.tinta.findMany({ orderBy: { id: 'asc' } });
     }
 
     async findById(id: number) {
