@@ -1,5 +1,10 @@
-import { PrismaClient, Role } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
+
+enum Role {
+    USER = 'USER',
+    ADMIN = 'ADMIN',
+}
 
 export async function adminSeed(prisma: PrismaClient) {
     console.log('Iniciando seed do usuário admin...');
