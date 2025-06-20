@@ -8,9 +8,13 @@
         "start": "node dist/index.js"
     },
     "dependencies": {
+        "@langchain/community": "^0.3.46",
         "@langchain/openai": "^0.0.1",
-        "dotenv": "^10.0.0",
+        "@prisma/client": "^6.10.1",
+        "dotenv": "^16.5.0",
         "express": "^4.21.2",
+        "faiss-node": "^0.5.1",
+        "fs-extra": "^11.3.0",
         "langchain": "^0.3.28",
         "openai": "^4.104.0"
     },

@@ -1,13 +1,13 @@
 # Stage 1: Build
 FROM node:22-slim AS builder
 WORKDIR /usr/src/app
-COPY package*.json ./
+COPY ./api-service/package*.json ./
 RUN apt-get update -y && apt-get install -y openssl
 RUN npm install
-COPY . .
-COPY prisma ./prisma
-COPY data ./data
-RUN npx prisma generate
+COPY ./api-service/. .
+COPY ./prisma ./prisma
+COPY ./api-service/data ./data
+RUN npx prisma generate --schema=./prisma/schema.prisma
 RUN npm run build
 RUN ls -l /usr/src/app/dist
 

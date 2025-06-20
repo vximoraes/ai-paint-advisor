@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import dotenv from 'dotenv';
-import { tintaSeed } from '../src/seeds/tintaSeed';
-import { adminSeed } from '../src/seeds/adminSeed';
+import { tintaSeed } from '../api-service/src/seeds/tintaSeed';
+import { adminSeed } from '../api-service/src/seeds/adminSeed';
 
 dotenv.config();
 const prisma = new PrismaClient();
