@@ -15,3 +15,49 @@ router
     .post('/login', asyncWrapper(authController.login.bind(authController)));
 
 export default router;
+
+/**
+ * @openapi
+ * /login:
+ *   post:
+ *     tags:
+ *       - Autenticação
+ *     summary: Realiza login
+ *     description: Gera um token JWT para autenticação de usuários.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: "admin@email.com"
+ *               password:
+ *                 type: string
+ *                 example: "Senha@Forte123"
+ *     responses:
+ *       '200':
+ *         description: Login realizado com sucesso.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *       '400':
+ *         description: Dados inválidos.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       '401':
+ *         description: Credenciais inválidas.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
