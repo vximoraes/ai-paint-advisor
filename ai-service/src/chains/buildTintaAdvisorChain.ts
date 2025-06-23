@@ -3,6 +3,7 @@ import { chatOpenAI } from "../config/openai";
 import { createPaintRecommenderTool } from "../tools/paintRecommenderTool";
 import { creativeAdvisorTool } from "../tools/creativeAdvisorTool";
 import { agentPrompt } from "../prompts/agentPrompt";
+import { imageGeneratorTool } from "../tools/imageGeneratorTool";
 
 /**
  * Cria e retorna um AgentExecutor configurado para o Loomi Paint Advisor.
@@ -25,13 +26,13 @@ export async function buildTintaAdvisorAgentExecutor(retriever: any) {
 
     const agent = await createOpenAIToolsAgent({
         llm: chatOpenAI as any,
-        tools: [paintRecommenderTool, creativeAdvisorTool],
+        tools: [paintRecommenderTool, creativeAdvisorTool, imageGeneratorTool],
         prompt: agentPrompt,
     });
 
     return AgentExecutor.fromAgentAndTools({
         agent,
-        tools: [paintRecommenderTool, creativeAdvisorTool],
+        tools: [paintRecommenderTool, creativeAdvisorTool, imageGeneratorTool],
         verbose: true,
     });
 }
