@@ -1,8 +1,31 @@
 nome,cor,tipo_parede,ambiente,acabamento,features,linha
-Suvinil Toque de Seda,Branco Neve,Alvenaria,Interno,Acetinado,"Lavável, Sem odor, Alta cobertura, Fácil limpeza",Premium
-Suvinil Fosco Completo,Cinza Urbano,Alvenaria,Interno/Externo,Fosco,"Anti-mofo, Alta cobertura, Resistente à umidade",Premium
-Suvinil Clássica,Amarelo Canário,Alvenaria,Interno,Fosco,"Boa cobertura, Econômica, Rápida secagem",Standard
-Suvinil Esmalte Sintético,Vermelho Ferrari,"Madeira, Ferro",Interno/Externo,Brilhante,"Alta durabilidade, Resistente ao calor, Impermeável",Premium
-Suvinil Criativa,Verde Menta,Alvenaria,Interno,Fosco,"Sem cheiro, Fácil aplicação, Lavável",Standard
-Suvinil Fachada Acrílica,Azul Sereno,Alvenaria,Externo,Fosco,"Resistente à chuva e sol, Anti-mofo, Lavável",Premium
-Suvinil Toque de Natureza,Bege Areia,Alvenaria,Interno/Externo,Acetinado,"Alta cobertura",Premium
+Suvinil Toque de Seda,Branco Neve,Alvenaria,Interno,Acetinado,"Lavável, Sem odor, Alta cobertura, Fácil limpeza, Toque aveludado",Premium
+Suvinil Fosco Completo,Cinza Urbano,Alvenaria,Interno/Externo,Fosco,"Anti-mofo, Alta cobertura, Resistente à umidade, Acabamento uniforme",Premium
+Suvinil Clássica,Amarelo Canário,Alvenaria,Interno,Fosco,"Boa cobertura, Econômica, Rápida secagem, Fácil retoque",Standard
+Suvinil Esmalte Sintético,Vermelho Ferrari,"Madeira, Ferro",Interno/Externo,Brilhante,"Alta durabilidade, Resistente ao calor, Impermeável, Secagem rápida",Premium
+Suvinil Criativa,Verde Menta,Alvenaria,Interno,Fosco,"Sem cheiro, Fácil aplicação, Lavável, Baixo respingo",Standard
+Suvinil Fachada Acrílica,Azul Sereno,Alvenaria,Externo,Fosco,"Resistente à chuva e sol, Anti-mofo, Lavável, Proteção UV",Premium
+Suvinil Toque de Natureza,Bege Areia,Alvenaria,Interno/Externo,Acetinado,"Alta cobertura, Toque suave, Fácil limpeza",Premium
+Suvinil Limpeza Total,Branco Gelo,Alvenaria,Interno,Semibrilho,"Super lavável, Resistente a manchas, Fácil manutenção, Antibactéria",Premium
+Suvinil Piso Forte,Cinza Concreto,Piso,Interno/Externo,Fosco,"Alta resistência ao tráfego, Antiderrapante, Fácil de limpar",Premium
+Suvinil Madeira Protegida,Nogueira,"Madeira",Interno/Externo,Acetinado,"Realça os veios, Protege contra cupins, Resistente à água",Premium
+Suvinil Metal Pro,Prata Metálico,Ferro,Externo,Brilhante,"Proteção anticorrosiva, Alta aderência, Secagem rápida",Premium
+Suvinil Teto Branco,Branco Teto,Alvenaria,Interno,Fosco,"Antimofo, Alta cobertura, Baixo respingo, Fácil aplicação",Standard
+Suvinil Toque de Luz,Amarelo Solar,Alvenaria,Interno,Acetinado,"Reflete luz, Ambiente mais iluminado, Lavável",Premium
+Suvinil Efeito Cimento,Cinza Urbano,Alvenaria,Interno/Externo,Fosco,"Efeito decorativo, Fácil aplicação, Alta durabilidade",Premium
+Suvinil Antipichação,Transparente,Alvenaria,Externo,Brilhante,"Protege contra pichações, Fácil limpeza, Resistente à água",Premium
+Suvinil Infantil,Azul Céu,Alvenaria,Interno,Fosco,"Sem cheiro, Lavável, Antibactéria, Cores vivas",Premium
+Suvinil Eco,Verde Folha,Alvenaria,Interno/Externo,Fosco,"Baixo VOC, Sustentável, Sem odor, Alta cobertura",Premium
+Suvinil Banheiro & Cozinha,Branco Neve,Alvenaria,Interno,Semibrilho,"Resistente à umidade, Antimofo, Fácil limpeza, Lavável",Premium
+Suvinil Texturizada,Areia,Alvenaria,Externo,Fosco,"Efeito decorativo, Resistente ao tempo, Fácil aplicação",Standard
+Suvinil Prática,Branco Neve,Alvenaria,Interno,Fosco,"Secagem rápida, Econômica, Boa cobertura",Standard
+Suvinil Esmalte Base Água,Branco,Madeira,Interno/Externo,Acetinado,"Baixo odor, Secagem rápida, Fácil limpeza, Não amarela",Premium
+Suvinil Proteção Total,Branco Gelo,Alvenaria,Externo,Fosco,"Proteção contra infiltração, Antimofo, Alta durabilidade",Premium
+Suvinil Multiambientes,Palha,Alvenaria,Interno/Externo,Fosco,"Versátil, Fácil aplicação, Boa cobertura",Standard
+Suvinil Ultra Resistente,Marrom Café,Alvenaria,Externo,Acetinado,"Alta resistência ao tempo, Lavável, Proteção UV",Premium
+Suvinil Toque de Carinho,Rosa Bebê,Alvenaria,Interno,Fosco,"Sem cheiro, Lavável, Toque suave, Ideal para quartos infantis",Premium
+Suvinil Cores do Brasil,Verde Bandeira,Alvenaria,Interno/Externo,Fosco,"Cores vibrantes, Alta cobertura, Resistente ao desbotamento",Premium
+Suvinil Esmalte Premium,Preto Ônix,"Madeira, Ferro",Interno/Externo,Brilhante,"Alta durabilidade, Proteção anticorrosiva, Fácil aplicação",Premium
+Suvinil Parede Viva,Laranja Atacama,Alvenaria,Interno,Fosco,"Cores intensas, Lavável, Fácil retoque",Standard
+Suvinil Fachada Flex,Branco Neve,Alvenaria,Externo,Fosco,"Alta flexibilidade, Resistente a fissuras, Proteção UV",Premium
+Suvinil Toque de Arte,Azul Royal,Alvenaria,Interno,Acetinado,"Acabamento artístico, Fácil limpeza, Cores intensas",Premium
