@@ -1,21 +1,22 @@
 import { FaissStore } from "@langchain/community/vectorstores/faiss";
 import { openaiEmbeddings } from "../config/openai";
-import { buildTintaAdvisorChain } from "../chains/buildTintaAdvisorChain";
+import { buildTintaAdvisorAgentExecutor } from "../chains/buildTintaAdvisorChain";
 import path from "path";
 import { PrismaClient } from "@prisma/client";
 import * as fs from "fs";
 
 export class ChatService {
-    private ragChain: any;
+    private agentExecutor: any;
     private initializing: Promise<void>;
     private prisma = new PrismaClient();
+    private chatHistory: any[] = [];
 
     constructor() {
         const vectorStorePath = path.resolve(process.cwd(), "src/vector-store");
         this.initializing = FaissStore.load(vectorStorePath, openaiEmbeddings)
-            .then((vectorStore: any) => {
+            .then(async (vectorStore: any) => {
                 const retriever = vectorStore.asRetriever();
-                this.ragChain = buildTintaAdvisorChain(retriever);
+                this.agentExecutor = await buildTintaAdvisorAgentExecutor(retriever);
             })
             .catch(async (err: any) => {
                 // Se falhar ao carregar, tenta reindexar automaticamente.
@@ -25,17 +26,30 @@ export class ChatService {
     }
 
     /**
-     * Realiza uma pergunta ao sistema de RAG, retornando a resposta gerada com base no contexto das tintas.
-     * Aguarda a inicialização do vector store caso ainda não esteja pronto.
+     * Realiza uma pergunta ao sistema de agentes, mantendo o histórico de chat.
+     * Aguarda a inicialização do agent executor caso ainda não esteja pronto.
      *
-     * @param {string} question - Pergunta do usuário sobre tintas.
-     * @returns {Promise<string>} - Resposta gerada pelo modelo com contexto recuperado.
+     * @param {string} question - Pergunta do usuário.
+     * @returns {Promise<string>} - Resposta gerada pelo agente.
      */
     async ask(question: string): Promise<string> {
-        if (!this.ragChain) {
+        if (!this.agentExecutor) {
             await this.initializing;
         }
-        return await this.ragChain.invoke({ question });
+
+        // Monta o input com histórico
+        const input = {
+            input: question,
+            chat_history: this.chatHistory,
+        };
+
+        const response = await this.agentExecutor.invoke(input);
+
+        // Atualiza o histórico
+        this.chatHistory.push({ role: "human", content: question });
+        this.chatHistory.push({ role: "ai", content: response.output });
+
+        return response.output;
     }
 
     /**
@@ -74,10 +88,9 @@ export class ChatService {
 
         const vectorStore = await FaissStore.fromTexts(documents, metadatas, openaiEmbeddings);
         await vectorStore.save(vectorStoreDir);
-
         console.log(`Vector store salvo em: ${vectorStoreDir}`);
         
-        // Atualiza o retriever e o chain para refletir o novo índice
-        this.ragChain = buildTintaAdvisorChain(vectorStore.asRetriever());
+        // Atualiza o retriever e o agent executor para refletir o novo índice
+        this.agentExecutor = await buildTintaAdvisorAgentExecutor(vectorStore.asRetriever());
     }
 }
