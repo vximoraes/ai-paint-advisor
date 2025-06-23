@@ -1,0 +1,61 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: loomi_paint_advisor
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    # Banco de dados PostgreSQL persistente com healthcheck
+
+  api:
+    build:
+      context: .
+      dockerfile: api-service/Dockerfile
+    ports:
+      - "4000:4000"
+    env_file:
+      - api-service/.env
+    depends_on:
+      db:
+        condition: service_healthy
+    command: sh -c "npx prisma migrate deploy && npm run start"
+    # API Node.js: roda migrations e inicia, espera DB saudável
+
+  ai:
+    build:
+      context: .
+      dockerfile: ai-service/Dockerfile
+    ports:
+      - "4001:4001"
+    env_file:
+      - ai-service/.env
+    depends_on:
+      db:
+        condition: service_healthy
+    command: npm run start
+    # Serviço de IA Node.js, espera DB saudável
+    volumes:
+      - ./ai-service/src/vector-store:/usr/src/app/ai-service/src/vector-store
+
+volumes:
+  db_data:
+    driver: local
+
+#
+# Service summary:
+# - db: PostgreSQL 15, persistent storage, healthcheck, exposed on 5432
+# - api: Node.js API, runs migrations then starts, waits for db healthy, exposed on 4000
+# - ai: Node.js AI service, waits for db healthy, exposed on 4001
+#
