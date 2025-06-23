@@ -19,7 +19,15 @@ export class ChatController {
             }
 
             const answer = await chatService.ask(question);
-            return res.status(200).json({ answer });
+
+            // Expressão regular para encontrar URL de imagem
+            const urlRegex = /(https?:\/\/[^\s)]+)/g;
+            const match = answer.match(urlRegex);
+            const imageUrl = match ? match[0] : null;
+            // Remove a URL do texto da resposta
+            const textAnswer = imageUrl ? answer.replace(imageUrl, "").replace(/\s+$/, "").trim() : answer;
+            
+            return res.status(200).json({ textAnswer, imageUrl });
         } catch (err) {
             return res.status(500).json({ error: "Erro ao processar a pergunta." });
         }

@@ -1,13 +1,13 @@
 # 🎨 Loomi Paint Advisor
 
-O Loomi Paint Advisor é um assistente inteligente projetado para ajudar usuários a escolherem a tinta ideal para seus projetos. A solução utiliza Inteligência Artificial para interpretar as necessidades dos usuários, recomendar produtos e responder a perguntas de forma natural, atuando como um verdadeiro especialista virtual em tintas.
+O Loomi Paint Advisor é um assistente inteligente projetado para ajudar usuários a escolherem a tinta ideal para seus projetos. A solução utiliza Inteligência Artificial para interpretar as necessidades dos usuários, recomendar produtos, gerar simulações visuais e responder a perguntas de forma natural, atuando como um verdadeiro especialista virtual em tintas.
 
 ## 🚀 Sobre o Projeto
 
 A aplicação é composta por dois serviços principais:
 
 - `api-service:` Uma API RESTful responsável pelo CRUD de tintas e usuários, além da autenticação de usuários e RBAC com JWT.
-- `ai-service:` Um serviço de IA que utiliza um agente orquestrador colaborativo (LangChain Agents) para responder perguntas sobre tintas e decoração, com base em um catálogo de produtos e prompts especializados. O ai-service é modularizado, com ferramentas e prompts desacoplados para facilitar manutenção e expansão.
+- `ai-service:` Um serviço de IA que utiliza um agente orquestrador colaborativo (LangChain Agents) para responder perguntas sobre tintas e decoração, com base em um catálogo de produtos e prompts especializados. O ai-service é modularizado, com ferramentas e prompts desacoplados para facilitar manutenção e expansão. Também é capaz de gerar imagens realistas de ambientes pintados usando DALL-E.
 
 Ambos os serviços são conteinerizados com Docker para facilitar o desenvolvimento e o deploy.
 
@@ -15,8 +15,9 @@ Ambos os serviços são conteinerizados com Docker para facilitar o desenvolvime
 
 - **CRUD de Tintas:** Gerenciamento completo do catálogo de tintas.
 - **Gerenciamento de Usuários e Autenticação:** Sistema de criação e autenticação de usuários com JWT e controle de acesso baseado em funções (RBAC).
-- **Assistente Inteligente (Chatbot):** Um endpoint de chat que recebe perguntas em linguagem natural e retorna recomendações de tintas e dicas de decoração.
-- **Agente Orquestrador Colaborativo:** O ai-service utiliza um agente que escolhe dinamicamente entre ferramentas especializadas: uma para perguntas técnicas sobre tintas (RAG) e outra para conselhos criativos de decoração.
+- **Assistente Inteligente (Chatbot):** Um endpoint de chat que recebe perguntas em linguagem natural e retorna recomendações de tintas, dicas de decoração e simulações visuais de ambientes pintados.
+- **Geração de Imagens com DALL-E:** O ai-service pode gerar imagens realistas de ambientes pintados conforme a descrição do usuário, utilizando a ferramenta `image_generator` integrada ao agente LangChain.
+- **Agente Orquestrador Colaborativo:** O ai-service utiliza um agente que escolhe dinamicamente entre ferramentas especializadas: uma para perguntas técnicas sobre tintas (RAG), outra para conselhos criativos de decoração e outra para geração de imagens.
 - **Busca Semântica com RAG:** Utiliza a técnica de Retrieval-Augmented Generation (RAG) para buscar informações relevantes no catálogo de tintas e fornecer respostas mais precisas.
 - **Reindexação Automática:** O ai-service é notificado para reindexar os embeddings das tintas sempre que há uma alteração no catálogo, garantindo que o chatbot tenha sempre as informações mais recentes.
 - **Documentação da API com Swagger:** A api-service conta com uma documentação completa e interativa gerada com Swagger (OpenAPI).
@@ -41,7 +42,7 @@ AI Service (`ai-service`):
 - Node.js com TypeScript
 - Express.js
 - LangChain para orquestração do fluxo de IA 
-- OpenAI API (gpt-3.5-turbo, text-embedding-3-small) para o modelo de linguagem e geração de embeddings
+- OpenAI API (gpt-3.5-turbo, text-embedding-3-small, dall-e-2) para o modelo de linguagem, geração de embeddings e imagens
 - FAISS (Facebook AI Similarity Search) como Vector Store para a busca de similaridade
 
 Geral:
@@ -200,19 +201,20 @@ Para fazer uma pergunta ao assistente, envie uma requisição POST para o endpoi
 
 ```json
 {
-    "question": "Quero pintar o quarto de Azul Céu. Tem alguma opção dessa cor? Além disso, você tem ideia sobre decorações para esse quarto, considerando que é para um bebê?"
+    "question": "Quero pintar minha varanda de azul escuro, algo moderno e resistente ao tempo. Qual tinta escolher? Como ficaria?"
 }
 ```
 
-#### Response:
+#### Response (exemplo com geração de imagem):
 
 ```json
 {
-    "answer": "A tinta Suvinil Infantil na cor Azul Céu é ideal para pintar o quarto, sendo sem cheiro, lavável, antibactéria e com cores vivas. É da linha Premium, garantindo qualidade e durabilidade.\n\nPara a decoração do quarto de bebê, aqui estão algumas dicas e ideias:\n1. Escolha uma paleta de cores suaves e calmantes, como tons de azul, rosa, verde ou amarelo, para criar um ambiente tranquilo.\n2. Opte por móveis funcionais e práticos, como um berço conversível, para economizar espaço e dinheiro a longo prazo.\n3. Adicione elementos personalizados, como quadros com o nome do bebê, almofadas temáticas e tapetes fofos.\n4. Aposte em temas que estimulem a criatividade do bebê, como animais da floresta ou personagens de contos de fadas.\n5. Use tecidos macios e aconchegantes, como algodão orgânico, para garantir o conforto do bebê.\n6. A tendência do estilo escandinavo, com móveis de madeira clara e tons neutros, pode criar um ambiente acolhedor.\n\nEspero que essas dicas sejam úteis e inspiradoras para a decoração do quarto do seu bebê! Se precisar de mais ideias ou conselhos, estou à disposição para ajudar."
+    "textAnswer": "Para um azul escuro resistente ao tempo, recomendo a tinta Suvinil Ultra Resistente na cor Azul Oceano. Esta tinta possui alta resistência ao tempo, é lavável e oferece proteção UV, sendo ideal para uso em paredes internas. Além disso, sua fórmula anti-mofo ajuda a manter o ambiente sempre bonito e protegido. Você pode encontrar essa opção na linha Premium da Suvinil. Espero ter ajudado!\n\nAqui está uma simulação de como ficaria a sua varanda pintada com a tinta Suvinil Azul Oceano: [Simulação de varanda com Suvinil Azul Oceano](). Espero que goste da sugestão! Se precisar de mais alguma informação, estou à disposição.",
+    "imageUrl": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-RixYHAd2NxNdbjOXR6ZUfng6/user-aA3vNHa8t5fXhybp6Vp0PdMG/img-rze3JT0QI0nmcyWpxfcrcEWm.png?st=2025-06-23T18%3A08%3A22Z&se=2025-06-23T20%3A08%3A22Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=cc612491-d948-4d2e-9821-2683df3719f5&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-06-23T17%3A25%3A31Z&ske=2025-06-24T17%3A25%3A31Z&sks=b&skv=2024-08-04&sig=8D/BjSW0NiRqnedMIvo1FnRkqO1Od1TTi7otvD%2BuAh0%3D"
 }
 ```
 
-> **Nota:** Para exibir a resposta formatada no front-end, substitua `\n` por quebras de linha reais (`<br>` no HTML ou `\n` em componentes que suportam multiline).
+> **Nota:** O campo `imageUrl` será preenchido sempre que o agente identificar um pedido para visualizar ou gerar uma imagem de um ambiente pintado. O link é público e pode ser acessado em qualquer sistema operacional enquanto estiver válido.
 
 ## 🤖 Uso de IA no Desenvolvimento
 
