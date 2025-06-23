@@ -1,93 +1,239 @@
-# loomi-paint-advisor
+# 🎨 Loomi Paint Advisor
 
+O Loomi Paint Advisor é um assistente inteligente projetado para ajudar usuários a escolherem a tinta ideal para seus projetos. A solução utiliza Inteligência Artificial para interpretar as necessidades dos usuários, recomendar produtos e responder a perguntas de forma natural, atuando como um verdadeiro especialista virtual em tintas.
 
+## 🚀 Sobre o Projeto
 
-## Getting started
+A aplicação é composta por dois serviços principais:
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+- `api-service:` Uma API RESTful responsável pelo CRUD de tintas e usuários, além da autenticação de usuários e RBAC com JWT.
+- `ai-service:` Um serviço de IA que utiliza um modelo de linguagem para responder perguntas sobre tintas, com base em um catálogo de produtos.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Ambos os serviços são conteinerizados com Docker para facilitar o desenvolvimento e o deploy.
 
-## Add your files
+## ✨ Features
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+- **CRUD de Tintas:** Gerenciamento completo do catálogo de tintas.
+- **Gerenciamento de Usuários e Autenticação:** Sistema de criação e autenticação de usuários com JWT e controle de acesso baseado em funções (RBAC).
+- **Assistente Inteligente (Chatbot):** Um endpoint de chat que recebe perguntas em linguagem natural e retorna recomendações de tintas.
+- **Busca Semântica com RAG:** Utiliza a técnica de Retrieval-Augmented Generation (RAG) para buscar informações relevantes no catálogo de tintas e fornecer respostas mais precisas.
+- **Reindexação Automática:** O ai-service é notificado para reindexar os embeddings das tintas sempre que há uma alteração no catálogo, garantindo que o chatbot tenha sempre as informações mais recentes.
+**Documentação da API com Swagger:** A api-service conta com uma documentação completa e interativa gerada com Swagger (OpenAPI).
 
+## 🛠️ Tecnologias
+
+Este projeto foi construído com as seguintes tecnologias:
+
+API Service (`api-service`):
+
+- Node.js com TypeScript
+- Express.js
+- Prisma como ORM para interação com o banco de dados
+- PostgreSQL como banco de dados relacional
+- Zod para validação de schemas
+- bcrypt para hashing de senhas
+- JWT (JSON Web Token) para autenticação
+- Swagger (OpenAPI) para documentação da API
+
+AI Service (`ai-service`):
+
+- Node.js com TypeScript
+- Express.js
+- LangChain.js para orquestração do fluxo de IA
+- OpenAI API (gpt-3.5-turbo, text-embedding-3-small) para o modelo de linguagem e geração de embeddings
+- FAISS (Facebook AI Similarity Search) como Vector Store para a busca de similaridade
+
+Geral:
+
+- Docker e Docker Compose para conteinerização e orquestração dos serviços
+
+## 🏁 Primeiros Passos
+
+Siga os passos abaixo para executar o projeto em seu ambiente local.
+
+### Pré-requisitos
+
+- Docker
+- Um editor de código de sua preferência (recomendado: VS Code)
+- npm
+
+### Instalação
+
+1. Clone o repositório:
+
+    ```bash
+    git clone https://gitlab.com/viniciusmoraesvha/loomi-paint-advisor.git
+    cd loomi-paint-advisor
+    ```
+
+2. Configure as variáveis de ambiente:
+
+    Crie o arquivo `.env` dentro de ai-service, api-service e na raiz do projeto, baseando-se nos exemplos abaixo:
+
+    `ai-service/.env`
+
+    ```bash
+    # Chave de API da OpenAI (obtenha em https://platform.openai.com/)
+    OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+    # Porta padrão do serviço de IA
+    PORT=4001
+
+    # URL de conexão com o banco de dados PostgreSQL
+    DATABASE_URL=postgresql://postgres:postgres@db:5432/loomi_paint_advisor
+    ```
+
+    `api-service/.env`
+
+    ```bash
+    # URL de conexão com o banco de dados PostgreSQL para ambiente local
+    DATABASE_URL=postgresql://postgres:postgres@localhost:5432/loomi_paint_advisor
+
+    # Porta padrão da API
+    PORT=4000
+
+    # JWT Secret para autenticação
+    # Altere para uma chave secreta, forte e única. Ex.: JWT_SECRET="b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6"
+    JWT_SECRET=sua_chave_secreta_access
+
+    # URL do endpoint de reindexação do AI Service (pode incluir host e porta)
+    # Exemplo: AI_SERVICE_URL=http://ai-service:4001/reindex
+    AI_SERVICE_URL=http://ai:4001/reindex
+    ```
+
+    `/.env`
+    ```bash
+    # URL de conexão com o banco de dados PostgreSQL para ambiente local
+    DATABASE_URL=postgresql://postgres:postgres@localhost:5432/loomi_paint_advisor
+
+    # E-mail e senha do admin para o seed seguro
+    ADMIN_EMAIL=admin@exemplo.com
+    ADMIN_PASSWORD=Senha@Forte123
+    ```
+
+3. Suba os containers com Docker Compose:
+
+    Este comando irá construir as imagens dos serviços e iniciar os containers do `api-service`, `ai-service` e do `banco de dados PostgreSQL`.
+
+    ```bash
+    docker-compose up --build
+    ```
+    
+    O `api-service` estará disponível em http://localhost:4000 e o `ai-service` em http://localhost:4001.
+
+4. Execute o seed do banco de dados:
+
+    Para popular o banco de dados com os dados iniciais de tintas (carregados a partir do arquivo `Base_de_Dados_de_Tintas_Suvinil.csv`) e com um usuário administrador (definido no `/.env`), execute os seguintes comandos em um novo terminal:
+
+    ```bash
+    npm run prisma:generate
+    ```
+
+    ```bash
+    npm run seed
+    ```
+
+    Este comando irá executar o script `prisma/seed` que, por sua vez, utiliza os scripts `api-service/src/seeds/tintaSeed` e `api-service/src/seeds/adminSeed` para popular o banco de dados.
+
+## 🕹️ Uso
+
+### Documentação da API (Swagger)
+
+A api-service possui uma documentação completa e interativa gerada com Swagger. Para acessá-la, visite:
+
+http://localhost:4000/docs
+
+Lá você encontrará todos os endpoints disponíveis, seus parâmetros, schemas e poderá testá-los diretamente.
+
+### Endpoints da API
+
+Abaixo estão listados os principais endpoints da `api-service` (http://localhost:4000). Para mais detalhes, consulte a documentação do Swagger.
+
+#### Autenticação
+
+- `POST /login`: Realiza o login e retorna um token JWT.
+
+#### Usuários
+
+- `POST /usuarios`: Cria um novo usuário.
+- `GET /usuarios`: Lista todos os usuários (requer autenticação de **ADMIN**).
+- `GET /usuarios/:id`: Busca um usuário por ID (requer autenticação + ser o usuário com o id especificado).
+- `PATCH /usuarios/:id`: Atualiza um usuário (requer autenticação + ser o usuário com o id especificado).
+- `DELETE /usuarios/:id`: Remove um usuário (requer autenticação de **ADMIN**).
+
+#### Tintas
+
+- `GET /tintas`: Lista todas as tintas.
+- `GET /tintas/:id`: Busca uma tinta por ID.
+- `POST /tintas`: Cria uma nova tinta (requer autenticação de **ADMIN**).
+- `PATCH /tintas/:id`: Atualiza uma tinta (requer autenticação de **ADMIN**).
+- `DELETE /tintas/:id`: Remove uma tinta (requer autenticação de **ADMIN**).
+
+### Exemplos de Requisições
+
+#### Autenticação
+
+Para acessar os endpoints protegidos, você primeiro precisa obter um token de autenticação. Utilize as credenciais de administrador que você configurou no arquivo `api-service/.env`. É necessário ter rodado as **seeds** anteriormente para gerar o usuário **ADMIN**.
+
+#### Request (`http://localhost:4000/login`):
+
+```JSON
+{
+    "email": "admin@exemplo.com",
+    "password": "Senha@Forte123"
+}'
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/viniciusmoraesvha/loomi-paint-advisor.git
-git branch -M main
-git push -uf origin main
+
+#### Response:
+
+```JSON
+{
+    "token": "SEU_TOKEN_JWT_AQUI"
+}
 ```
 
-## Integrate with your tools
+### Chat com o Assistente de IA
 
-- [ ] [Set up project integrations](https://gitlab.com/viniciusmoraesvha/loomi-paint-advisor/-/settings/integrations)
+Para fazer uma pergunta ao assistente de tintas, envie uma requisição POST para o endpoint `/chat` do ai-service.
 
-## Collaborate with your team
+#### Request (`http://localhost:4001/chat`):
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+```JSON
+{
+    "question": "Quero pintar a parede externa da minha casa, que pega muito sol e chuva. Qual tinta vocês recomendam?"
+}
+```
 
-## Test and Deploy
+#### Response:
 
-Use the built-in continuous integration in GitLab.
+```JSON
+{
+    "answer": "Para ambientes externos que sofrem com sol e chuva, a Suvinil Fachada Acrílica é a mais recomendada. Ela possui alta resistência a essas condições, além de ser anti-mofo e lavável, o que garante uma maior durabilidade para a pintura."
+}
+```
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+## 🤖 Uso de IA no Desenvolvimento
 
-***
+Este projeto foi construído com o apoio de ferramentas de Inteligência Artificial, que foram essenciais na produtividade, desde a fase de concepção e estudo até a implementação e refatoração do código.
 
-# Editing this README
+### Ferramentas Utilizadas:
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+- **Google Gemini Pro:** Foi o principal assistente para pesquisa, aprendizado e ideação. Seu uso foi focado em entender conceitos do projeto, especialmente de IA, como a arquitetura RAG (Retrieval-Augmented Generation) com melhores práticas, e em elaborar os prompts que formam o "cérebro" do nosso assistente de tintas no ai-service.
+- **GitHub Copilot (GPT-4.1):** Atuou como um programador em par, diretamente no editor de código. Foi amplamente utilizado para gerar código boilerplate, autocompletar trechos de código e acelerar o desenvolvimento do projeto de forma geral.
 
-## Suggestions for a good README
+### Exemplos de Interação com as IAs
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+- Prompt para o Gemini (Estudo e Elaboração de Prompt):
 
-## Name
-Choose a self-explaining name for your project.
+        "Estou usando LangChain para criar um chatbot que recomenda tintas. Tenho um catálogo de produtos em formato de texto. Quero que o chatbot seja um 'especialista amigável'. Me ajude a construir o ChatPromptTemplate ideal. Ele deve receber o context (informações das tintas encontradas) e a question (pergunta do usuário). O tom da resposta deve ser o de um especialista prestativo, sempre começando a resposta se baseando nos dados do contexto e, se o contexto não for suficiente, ele deve dizer que não encontrou a informação no catálogo. Crie o prompt completo e revise os pontos principais."
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+- Interação com o GitHub Copilot (Geração de Código):
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+        No arquivo api-service/src/controllers/TintaController.ts, ao escrever um comentário como: // Método para criar uma nova tinta, recebendo os dados do body e validando com o schema do Zod, o Copilot gerou automaticamente o esqueleto completo do método create, incluindo a chamada ao TintaService e o tratamento de erros.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+### Tomada de Decisão com Base nas Sugestões da IA
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+- A decisão de utilizar a biblioteca FAISS para criar o Vector Store em memória foi tomada após uma análise com o Gemini sobre as melhores abordagens de RAG para um volume moderado de dados, priorizando a simplicidade e a rapidez na busca de similaridade, sem a necessidade de um banco de dados vetorial externo. 
+- O GitHub Copilot foi um parceiro crucial no desenvolvimento. Além de acelerar tarefas na API, ele contribuiu ativamente com ideias e na geração de códigos importantes para o serviço de IA, como na implementação da busca vetorial com FAISS e na orquestração da chain com LangChain, que eram os pontos mais complexos do desafio.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+É importante frisar que, seguindo as boas práticas e as diretrizes do desafio, todo e qualquer código gerado por IA foi minuciosamente analisado e revisado. Mesmo as sugestões mais complexas foram compreendidas, testadas e, quando necessário, ajustadas antes de serem integradas ao projeto. Essa abordagem garantiu que a lógica implementada estivesse sempre correta, alinhada aos objetivos da aplicação e mantendo a qualidade do código.
