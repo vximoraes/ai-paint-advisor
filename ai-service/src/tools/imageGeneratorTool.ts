@@ -36,6 +36,7 @@ export const imageGeneratorTool = new DynamicTool({
             });
 
             const imageUrl = response.data && response.data[0]?.url;
+            console.log('DALL-E imageUrl gerado:', imageUrl, 'response.data:', response.data);
             if (!imageUrl) throw new Error("Não foi possível gerar a imagem.");
 
             return `Aqui está uma simulação de como ficaria: ${imageUrl}`;
