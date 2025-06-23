@@ -7,7 +7,7 @@ O Loomi Paint Advisor é um assistente inteligente projetado para ajudar usuári
 A aplicação é composta por dois serviços principais:
 
 - `api-service:` Uma API RESTful responsável pelo CRUD de tintas e usuários, além da autenticação de usuários e RBAC com JWT.
-- `ai-service:` Um serviço de IA que utiliza um modelo de linguagem para responder perguntas sobre tintas, com base em um catálogo de produtos.
+- `ai-service:` Um serviço de IA que utiliza um agente orquestrador colaborativo (LangChain Agents) para responder perguntas sobre tintas e decoração, com base em um catálogo de produtos e prompts especializados. O ai-service é modularizado, com ferramentas e prompts desacoplados para facilitar manutenção e expansão.
 
 Ambos os serviços são conteinerizados com Docker para facilitar o desenvolvimento e o deploy.
 
@@ -15,10 +15,11 @@ Ambos os serviços são conteinerizados com Docker para facilitar o desenvolvime
 
 - **CRUD de Tintas:** Gerenciamento completo do catálogo de tintas.
 - **Gerenciamento de Usuários e Autenticação:** Sistema de criação e autenticação de usuários com JWT e controle de acesso baseado em funções (RBAC).
-- **Assistente Inteligente (Chatbot):** Um endpoint de chat que recebe perguntas em linguagem natural e retorna recomendações de tintas.
+- **Assistente Inteligente (Chatbot):** Um endpoint de chat que recebe perguntas em linguagem natural e retorna recomendações de tintas e dicas de decoração.
+- **Agente Orquestrador Colaborativo:** O ai-service utiliza um agente que escolhe dinamicamente entre ferramentas especializadas: uma para perguntas técnicas sobre tintas (RAG) e outra para conselhos criativos de decoração.
 - **Busca Semântica com RAG:** Utiliza a técnica de Retrieval-Augmented Generation (RAG) para buscar informações relevantes no catálogo de tintas e fornecer respostas mais precisas.
 - **Reindexação Automática:** O ai-service é notificado para reindexar os embeddings das tintas sempre que há uma alteração no catálogo, garantindo que o chatbot tenha sempre as informações mais recentes.
-**Documentação da API com Swagger:** A api-service conta com uma documentação completa e interativa gerada com Swagger (OpenAPI).
+- **Documentação da API com Swagger:** A api-service conta com uma documentação completa e interativa gerada com Swagger (OpenAPI).
 
 ## 🛠️ Tecnologias
 
@@ -39,7 +40,7 @@ AI Service (`ai-service`):
 
 - Node.js com TypeScript
 - Express.js
-- LangChain.js para orquestração do fluxo de IA
+- LangChain para orquestração do fluxo de IA 
 - OpenAI API (gpt-3.5-turbo, text-embedding-3-small) para o modelo de linguagem e geração de embeddings
 - FAISS (Facebook AI Similarity Search) como Vector Store para a busca de similaridade
 
@@ -54,7 +55,6 @@ Siga os passos abaixo para executar o projeto em seu ambiente local.
 ### Pré-requisitos
 
 - Docker
-- Um editor de código de sua preferência (recomendado: VS Code)
 - npm
 
 ### Instalação
@@ -194,23 +194,25 @@ Para acessar os endpoints protegidos, você primeiro precisa obter um token de a
 
 ### Chat com o Assistente de IA
 
-Para fazer uma pergunta ao assistente de tintas, envie uma requisição POST para o endpoint `/chat` do ai-service.
+Para fazer uma pergunta ao assistente, envie uma requisição POST para o endpoint `/chat` do ai-service.
 
 #### Request (`http://localhost:4001/chat`):
 
-```JSON
+```json
 {
-    "question": "Quero pintar a parede externa da minha casa, que pega muito sol e chuva. Qual tinta vocês recomendam?"
+    "question": "Quero pintar o quarto de Azul Céu. Tem alguma opção dessa cor? Além disso, você tem ideia sobre decorações para esse quarto, considerando que é para um bebê?"
 }
 ```
 
 #### Response:
 
-```JSON
+```json
 {
-    "answer": "Para ambientes externos que sofrem com sol e chuva, a Suvinil Fachada Acrílica é a mais recomendada. Ela possui alta resistência a essas condições, além de ser anti-mofo e lavável, o que garante uma maior durabilidade para a pintura."
+    "answer": "A tinta Suvinil Infantil na cor Azul Céu é ideal para pintar o quarto, sendo sem cheiro, lavável, antibactéria e com cores vivas. É da linha Premium, garantindo qualidade e durabilidade.\n\nPara a decoração do quarto de bebê, aqui estão algumas dicas e ideias:\n1. Escolha uma paleta de cores suaves e calmantes, como tons de azul, rosa, verde ou amarelo, para criar um ambiente tranquilo.\n2. Opte por móveis funcionais e práticos, como um berço conversível, para economizar espaço e dinheiro a longo prazo.\n3. Adicione elementos personalizados, como quadros com o nome do bebê, almofadas temáticas e tapetes fofos.\n4. Aposte em temas que estimulem a criatividade do bebê, como animais da floresta ou personagens de contos de fadas.\n5. Use tecidos macios e aconchegantes, como algodão orgânico, para garantir o conforto do bebê.\n6. A tendência do estilo escandinavo, com móveis de madeira clara e tons neutros, pode criar um ambiente acolhedor.\n\nEspero que essas dicas sejam úteis e inspiradoras para a decoração do quarto do seu bebê! Se precisar de mais ideias ou conselhos, estou à disposição para ajudar."
 }
 ```
+
+> **Nota:** Para exibir a resposta formatada no front-end, substitua `\n` por quebras de linha reais (`<br>` no HTML ou `\n` em componentes que suportam multiline).
 
 ## 🤖 Uso de IA no Desenvolvimento
 

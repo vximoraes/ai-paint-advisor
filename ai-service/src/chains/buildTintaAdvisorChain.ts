@@ -1,35 +1,37 @@
-import { PromptTemplate } from "@langchain/core/prompts";
-import { RunnableSequence } from "@langchain/core/runnables";
-import { StringOutputParser } from "@langchain/core/output_parsers";
+import { createOpenAIToolsAgent, AgentExecutor } from "langchain/agents";
 import { chatOpenAI } from "../config/openai";
+import { createPaintRecommenderTool } from "../tools/paintRecommenderTool";
+import { creativeAdvisorTool } from "../tools/creativeAdvisorTool";
+import { agentPrompt } from "../prompts/agentPrompt";
 
 /**
- * Constrói a cadeia de execução (chain) para o especialista em tintas Suvinil.
- * Usa um retriever para buscar contexto relevante e um modelo de linguagem para gerar respostas personalizadas.
+ * Cria e retorna um AgentExecutor configurado para o Loomi Paint Advisor.
  *
- * @param {any} retriever - Responsável por recuperar contexto relevante.
- * @returns {RunnableSequence} - Cadeia para processar perguntas e gerar respostas.
+ * O agente orquestrador utiliza ferramentas especializadas para responder perguntas sobre tintas Suvinil (via RAG)
+ * e fornecer conselhos criativos de decoração. O agente analisa a pergunta do usuário e decide qual ferramenta
+ * utilizar, mantendo o contexto da conversa através do histórico.
+ *
+ * @param retriever - Instância responsável por buscar contexto relevante no catálogo de tintas (usada pelo RAG).
+ * @returns Promise<AgentExecutor> Executor de agente pronto para ser utilizado no serviço de chat.
+ *
+ * @example
+ * const executor = await buildTintaAdvisorAgentExecutor(retriever);
+ * const resposta = await executor.invoke({ input: "Quero pintar o quarto de Azul Céu...", chat_history: [] });
+ * console.log(resposta.output);
  */
-export function buildTintaAdvisorChain(retriever: any) {
-    const prompt = PromptTemplate.fromTemplate(
-        `Você é um especialista em tintas da Suvinil. 
-        Use o contexto de produtos abaixo para responder à pergunta do usuário de forma amigável e útil.
-        \n\nContexto:\n{context}\n\nPergunta:\n{question}\n\nResposta do Especialista:`
-    );
+export async function buildTintaAdvisorAgentExecutor(retriever: any) {
+    const paintRecommenderTool = createPaintRecommenderTool(retriever);
+    // creativeAdvisorTool não depende do retriever
 
-    return RunnableSequence.from([
-        // Busca contexto relevante para a pergunta, monta o prompt e chama o modelo.
-        async (input: { question: string }) => {
-            const docs = await retriever.invoke(input.question);
-            return {
-                context: Array.isArray(docs)
-                    ? docs.map((d) => d.pageContent || d.content || d.text).join("\n")
-                    : docs,
-                question: input.question,
-            };
-        },
-        prompt,
-        async (input: any) => chatOpenAI.invoke(input),
-        async (output: any) => new StringOutputParser().invoke(output),
-    ]);
+    const agent = await createOpenAIToolsAgent({
+        llm: chatOpenAI as any,
+        tools: [paintRecommenderTool, creativeAdvisorTool],
+        prompt: agentPrompt,
+    });
+
+    return AgentExecutor.fromAgentAndTools({
+        agent,
+        tools: [paintRecommenderTool, creativeAdvisorTool],
+        verbose: true,
+    });
 }
