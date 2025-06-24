@@ -88,7 +88,7 @@ Siga os passos abaixo para executar o projeto em seu ambiente local.
 
     ```bash
     # URL de conexão com o banco de dados PostgreSQL para ambiente local
-    DATABASE_URL=postgresql://postgres:postgres@localhost:5432/loomi_paint_advisor
+    DATABASE_URL=postgresql://postgres:postgres@db:5432/loomi_paint_advisor
 
     # Porta padrão da API
     PORT=4000
