@@ -117,7 +117,7 @@ Siga os passos abaixo para executar o projeto em seu ambiente local.
     Este comando irá construir as imagens dos serviços e iniciar os containers do `api-service`, `ai-service` e do `banco de dados PostgreSQL`.
 
     ```bash
-    docker-compose up --build
+    docker compose up --build
     ```
     
     O `api-service` estará disponível em http://localhost:4000 e o `ai-service` em http://localhost:4001.
