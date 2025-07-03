@@ -182,7 +182,7 @@ Para acessar os endpoints protegidos, você primeiro precisa obter um token de a
 {
     "email": "admin@exemplo.com",
     "password": "Senha@Forte123"
-}'
+}
 ```
 
 #### Response:
