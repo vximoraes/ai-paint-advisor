@@ -1,8 +1,8 @@
 {
-    "name": "loomi-paint-advisor",
+    "name": "ai-paint-advisor",
     "version": "1.0.0",
     "private": true,
-    "description": "Monorepo for Loomi Paint Advisor (API, AI, Prisma, etc)",
+    "description": "Monorepo for AI Paint Advisor (API, AI, Prisma, etc)",
     "scripts": {
         "dev:api": "ts-node-dev --respawn --transpile-only api-service/src/server.ts",
         "dev:ai": "ts-node ai-service/src/index.ts",

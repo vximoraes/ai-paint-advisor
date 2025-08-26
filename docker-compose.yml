@@ -5,7 +5,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: loomi_paint_advisor
+      POSTGRES_DB: ai_paint_advisor
     ports:
       - "5432:5432"
     volumes:

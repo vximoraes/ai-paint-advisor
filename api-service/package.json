@@ -1,5 +1,5 @@
 {
-    "name": "loomi-paint-advisor",
+    "name": "ai-paint-advisor",
     "version": "1.0.0",
     "description": "A Clean Architecture Express.js API for paint advisory.",
     "main": "dist/server.js",

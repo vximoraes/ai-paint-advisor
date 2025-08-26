@@ -4,9 +4,9 @@ const options: swaggerJsdoc.Options = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'Loomi Paint Advisor API',
+            title: 'AI Paint Advisor API',
             version: '1.0.0',
-            description: 'API para gerenciamento de tintas, usuários e autenticação, parte do Desafio Back-end IA da Loomi.',
+            description: 'API para gerenciamento de tintas e recomendações feitas por IA.',
         },
         servers: [
             {

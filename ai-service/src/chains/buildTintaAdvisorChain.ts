@@ -6,7 +6,7 @@ import { agentPrompt } from "../prompts/agentPrompt";
 import { imageGeneratorTool } from "../tools/imageGeneratorTool";
 
 /**
- * Cria e retorna um AgentExecutor configurado para o Loomi Paint Advisor.
+ * Cria e retorna um AgentExecutor configurado para o AI Paint Advisor.
  *
  * O agente orquestrador utiliza ferramentas especializadas para responder perguntas sobre tintas Suvinil (via RAG)
  * e fornecer conselhos criativos de decoração. O agente analisa a pergunta do usuário e decide qual ferramenta

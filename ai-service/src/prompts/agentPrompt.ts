@@ -1,7 +1,7 @@
 import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
 
 /**
- * Prompt do agente orquestrador do Loomi Paint Advisor.
+ * Prompt do agente orquestrador do AI Paint Advisor.
  *
  * Este prompt instrui o agente a analisar a pergunta do usuário e escolher entre as ferramentas disponíveis,
  * de acordo com a intenção detectada na mensagem:

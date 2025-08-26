@@ -1,6 +1,6 @@
-# 🎨 Loomi Paint Advisor
+# 🎨 AI Paint Advisor
 
-O Loomi Paint Advisor é um assistente inteligente projetado para ajudar usuários a escolherem a tinta ideal para seus projetos. A solução utiliza Inteligência Artificial para interpretar as necessidades dos usuários, recomendar produtos, gerar simulações visuais e responder a perguntas de forma natural, atuando como um verdadeiro especialista virtual em tintas.
+O AI Paint Advisor é um assistente inteligente projetado para ajudar usuários a escolherem a tinta ideal para seus projetos. A solução utiliza Inteligência Artificial para interpretar as necessidades dos usuários, recomendar produtos, gerar simulações visuais e responder a perguntas de forma natural, atuando como um verdadeiro especialista virtual em tintas.
 
 ## 🚀 Sobre o Projeto
 
@@ -63,8 +63,8 @@ Siga os passos abaixo para executar o projeto em seu ambiente local.
 1. Clone o repositório:
 
     ```bash
-    git clone https://gitlab.com/viniciusmoraesvha/loomi-paint-advisor.git
-    cd loomi-paint-advisor
+    git clone https://gitlab.com/viniciusmoraesvha/ai-paint-advisor.git
+    cd ai-paint-advisor
     ```
 
 2. Configure as variáveis de ambiente:
@@ -81,14 +81,14 @@ Siga os passos abaixo para executar o projeto em seu ambiente local.
     PORT=4001
 
     # URL de conexão com o banco de dados PostgreSQL
-    DATABASE_URL=postgresql://postgres:postgres@db:5432/loomi_paint_advisor
+    DATABASE_URL=postgresql://postgres:postgres@db:5432/ai-paint-advisor
     ```
 
     `api-service/.env`
 
     ```bash
     # URL de conexão com o banco de dados PostgreSQL para ambiente local
-    DATABASE_URL=postgresql://postgres:postgres@db:5432/loomi_paint_advisor
+    DATABASE_URL=postgresql://postgres:postgres@db:5432/ai-paint-advisor
 
     # Porta padrão da API
     PORT=4000
@@ -105,7 +105,7 @@ Siga os passos abaixo para executar o projeto em seu ambiente local.
     `/.env`
     ```bash
     # URL de conexão com o banco de dados PostgreSQL para ambiente local
-    DATABASE_URL=postgresql://postgres:postgres@localhost:5432/loomi_paint_advisor
+    DATABASE_URL=postgresql://postgres:postgres@localhost:5432/ai-paint-advisor
 
     # E-mail e senha do admin para o seed seguro
     ADMIN_EMAIL=admin@exemplo.com
