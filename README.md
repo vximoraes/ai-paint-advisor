@@ -215,29 +215,3 @@ Para fazer uma pergunta ao assistente, envie uma requisição POST para o endpoi
 ```
 
 > **Nota:** O campo `imageUrl` será preenchido sempre que o agente identificar um pedido para visualizar ou gerar uma imagem de um ambiente pintado. O link é público e pode ser acessado em qualquer sistema operacional enquanto estiver válido.
-
-## 🤖 Uso de IA no Desenvolvimento
-
-Este projeto foi construído com o apoio de ferramentas de Inteligência Artificial, que foram essenciais na produtividade, desde a fase de concepção e estudo até a implementação e refatoração do código.
-
-### Ferramentas Utilizadas:
-
-- **Google Gemini Pro:** Foi o principal assistente para pesquisa, aprendizado e ideação. Seu uso foi focado em entender conceitos do projeto, especialmente de IA, como a arquitetura RAG (Retrieval-Augmented Generation) com melhores práticas, e em elaborar os prompts que formam o "cérebro" do nosso assistente de tintas no ai-service.
-- **GitHub Copilot (GPT-4.1):** Atuou como um programador em par, diretamente no editor de código. Foi amplamente utilizado para gerar código boilerplate, autocompletar trechos de código e acelerar o desenvolvimento do projeto de forma geral.
-
-### Exemplos de Interação com as IAs
-
-- Prompt para o Gemini (Estudo e Elaboração de Prompt):
-
-        "Estou usando LangChain para criar um chatbot que recomenda tintas. Tenho um catálogo de produtos em formato de texto. Quero que o chatbot seja um 'especialista amigável'. Me ajude a construir o ChatPromptTemplate ideal. Ele deve receber o context (informações das tintas encontradas) e a question (pergunta do usuário). O tom da resposta deve ser o de um especialista prestativo, sempre começando a resposta se baseando nos dados do contexto e, se o contexto não for suficiente, ele deve dizer que não encontrou a informação no catálogo. Crie o prompt completo e revise os pontos principais."
-
-- Interação com o GitHub Copilot (Geração de Código):
-
-        No arquivo api-service/src/controllers/TintaController.ts, ao escrever um comentário como: // Método para criar uma nova tinta, recebendo os dados do body e validando com o schema do Zod, o Copilot gerou automaticamente o esqueleto completo do método create, incluindo a chamada ao TintaService e o tratamento de erros.
-
-### Tomada de Decisão com Base nas Sugestões da IA
-
-- A decisão de utilizar a biblioteca FAISS para criar o Vector Store em memória foi tomada após uma análise com o Gemini sobre as melhores abordagens de RAG para um volume moderado de dados, priorizando a simplicidade e a rapidez na busca de similaridade, sem a necessidade de um banco de dados vetorial externo. 
-- O GitHub Copilot foi um parceiro crucial no desenvolvimento. Além de acelerar tarefas na API, ele contribuiu ativamente com ideias e na geração de códigos importantes para o serviço de IA, como na implementação da busca vetorial com FAISS e na orquestração da chain com LangChain, que eram os pontos mais complexos do desafio.
-
-É importante frisar que, seguindo as boas práticas e as diretrizes do desafio, todo e qualquer código gerado por IA foi minuciosamente analisado e revisado. Mesmo as sugestões mais complexas foram compreendidas, testadas e, quando necessário, ajustadas antes de serem integradas ao projeto. Essa abordagem garantiu que a lógica implementada estivesse sempre correta, alinhada aos objetivos da aplicação e mantendo a qualidade do código.
