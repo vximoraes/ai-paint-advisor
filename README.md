@@ -2,7 +2,7 @@
 
 O AI Paint Advisor é um assistente inteligente projetado para ajudar usuários a escolherem a tinta ideal para seus projetos. A solução utiliza Inteligência Artificial para interpretar as necessidades dos usuários, recomendar produtos, gerar simulações visuais e responder a perguntas de forma natural, atuando como um verdadeiro especialista virtual em tintas.
 
-## 🚀 Sobre o Projeto
+## Sobre o Projeto
 
 A aplicação é composta por dois serviços principais:
 
@@ -11,7 +11,7 @@ A aplicação é composta por dois serviços principais:
 
 Ambos os serviços são conteinerizados com Docker para facilitar o desenvolvimento e o deploy.
 
-## ✨ Features
+## Features
 
 - **CRUD de Tintas:** Gerenciamento completo do catálogo de tintas.
 - **Gerenciamento de Usuários e Autenticação:** Sistema de criação e autenticação de usuários com JWT e controle de acesso baseado em funções (RBAC).
@@ -22,7 +22,7 @@ Ambos os serviços são conteinerizados com Docker para facilitar o desenvolvime
 - **Reindexação Automática:** O ai-service é notificado para reindexar os embeddings das tintas sempre que há uma alteração no catálogo, garantindo que o chatbot tenha sempre as informações mais recentes.
 - **Documentação da API com Swagger:** A api-service conta com uma documentação completa e interativa gerada com Swagger (OpenAPI).
 
-## 🛠️ Tecnologias
+## Tecnologias
 
 Este projeto foi construído com as seguintes tecnologias:
 
@@ -49,7 +49,7 @@ Geral:
 
 - Docker e Docker Compose para conteinerização e orquestração dos serviços
 
-## 🏁 Primeiros Passos
+## Primeiros Passos
 
 Siga os passos abaixo para executar o projeto em seu ambiente local.
 
@@ -136,7 +136,7 @@ Siga os passos abaixo para executar o projeto em seu ambiente local.
 
     Este comando irá executar o script `prisma/seed` que, por sua vez, utiliza os scripts `api-service/src/seeds/tintaSeed` e `api-service/src/seeds/adminSeed` para popular o banco de dados.
 
-## 🕹️ Uso
+## Uso
 
 ### Documentação da API (Swagger)
 
